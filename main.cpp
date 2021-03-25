@@ -3,42 +3,10 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
-//#include "RandomNumberGenerator.h"
-#include <cmath>
-
+#include "RandomNumberGenerator.h"
+#include <algorithm>
 
 using namespace std;
-
-class RandomNumberGenerator
-{
-private:
-
-	long seed;
-
-public:
-	RandomNumberGenerator(long seedValue) :
-		seed(seedValue)
-	{}
-	int nextInt(int low, int high) {
-		long k;
-		double value_0_1;
-		long m = 2147483647l, a = 16807l, b = 127773l, c = 2836l;
-
-		k = seed / b;
-		seed = a * (seed % b) - k * c;
-		if (seed < 0)
-			seed = seed + m;
-		value_0_1 = seed;
-		value_0_1 /= m;
-		return low + (int)floor(value_0_1 * (high - low + 1));
-	}
-	float nextFloat(int low, int high) {
-		low *= 100000;
-		high *= 100000;
-		float val = nextInt(low, high) / 100000.0;
-		return val;
-	}
-};
 
 enum Tryb {a, b}; //Tryb pracy algorytmu Schrage1 bez sortowania i z
 
@@ -149,11 +117,6 @@ int main()
 	cout << "Po algorytmie Schrage 1: " << endl;
 	Wyswietl(wynik);
 	Kryt(wynik);
-
-	/*sort_r(quest2);
-	cout << "Przed algorytmem: " << endl;
-	Wyswietl(quest2);
-	Kryt(quest2);*/
 
 	wynik=Schrage_alg1(quest2,b);
 	cout << endl;
@@ -312,6 +275,7 @@ void Kryt(vector<Zdarzenie> &wynik)
 	int* C = new int [wynik.size()];
 	int C_max, i;
 
+
 	S[0] = wynik[0].r_j;
 	C[0] = S[0] + wynik[0].p_j;
 	C_max = C[0] + wynik[0].q_j;
@@ -343,65 +307,41 @@ vector<Zdarzenie> Schrage_alg2(vector<Zdarzenie> z1)
 	vector <Zdarzenie> Pi;
 	vector <Zdarzenie> tmp;
 	int t = min_r(N);
-	int t1;
-	//cout << "t = [ "<< t << " ";
-	
-	//cout << "??: " <<(int) N.begin() << endl;
-	//cout << G.size() << " " << N.size() << " " << t << endl;
-	//cout << G.capacity() << " " << N.capacity() << " " << t << endl; 
-
+	int C_max2 = 0;
 	while ( G.size() != 0 || N.size() != 0)
 	{
-		//cout << "xd" << endl;
 		while(N.size() != 0 && min_r(N) <=t)
 		{
 			new_j = min_r_idx(N);
 			G.push_back(N[new_j]);
 			N.erase(N.begin()+new_j);
-			//cout << N.size() << endl;
-			//Wyswietl(N,N.size());
 		}
 		if(G.size() != 0)
 		{
-			t1=t+G[new_j].p_j;
-			new_j=max_q_idx(G);
-			cout << "t = " << t << endl;
-			t=t+N[new_j].p_j;
 			
-			cout << "t1 = " << t1 <<" r = "<< N[new_j].p_j<< endl;
-			//cout << "t = " << t << endl;
+			new_j=max_q_idx(G);
+			t=t+G[new_j].p_j;
+			C_max2= max(t+G[new_j].q_j,C_max2);
+			Pi.push_back(G[new_j]);
+			G.erase(G.begin()+new_j);
+
 			for(int kk = 0; kk <N.size(); kk++)
 			{
-				if(t>N[kk].r_j)
+				if(t>N[kk].r_j && N[kk].q_j > G[new_j].q_j)
 				{
-					cout << t << " " << N[kk].r_j << endl;
 					tmp.push_back(G[new_j]);
 					tmp[0].p_j = t - N[kk].r_j;
+					t=N[kk].r_j;
 					G.push_back(N[kk]);
 					G.push_back(tmp[0]);
 					N.erase(N.begin()+kk);
 					tmp.erase(tmp.begin());
 				}
 			}
-
-			//cout <<"idx G: " << new_j << endl;
-			//cout << "G1: " << endl;
-			//Wyswietl(G);
-			Pi.push_back(G[new_j]);
-
-			//cout << endl;
-			G.erase(G.begin()+new_j);
-			//cout << "G2: " << endl;
-			//Wyswietl(G,G.size());
-			
 			k+=1;
-			//cout << "Pi =" << endl;
-			//Wyswietl(Pi,Pi.size());
-			//cout << endl;
 		}
 		else t = min_r(N);
-		//cout << t << " ";
 	}
-	//cout << "]";
+	cout << "C_max2 = " << C_max2 << endl;
 	return Pi;
 }
