@@ -7,6 +7,12 @@
 
 using namespace std;
 
+/*class Zadanie
+{
+	int idx;
+	int C;
+};*/
+
 int min_idx(vector<int*> N, int m)
 {
 	int idx = 0;
