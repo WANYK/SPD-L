@@ -7,11 +7,76 @@
 
 using namespace std;
 
-/*class Zadanie
+struct Zadanie
 {
 	int idx;
-	int C;
-};*/
+	int t[2];
+
+};
+
+int min_idx(vector<int*> N, int m);
+
+int min_idx(vector<Zadanie> N, int m);
+
+void Kryt(vector<int*> J, int m);
+
+void Johnson(vector<int*> J, int m);
+
+
+int main()
+{
+	long ziarno;
+	cout << "Podaj ziarno: ";
+	cin >> ziarno;
+	RandomNumberGenerator r1(ziarno);
+	int wlk;
+	cout << "Wprowadz wielkosc instancji: ";
+	cin >> wlk;
+	int n = 2; //dla dwóch maszyn
+	Zadanie* quest = new Zadanie[wlk]; 
+	vector<int*> test1;
+	vector<Zadanie> test2;
+	vector<Zadanie> Wynik;
+	for(int i=0; i<wlk; i++)
+	{
+		int* kkk = new int [n];
+		test1.push_back(kkk);
+
+	}
+
+	for(int i = 0; i<wlk; i++)
+	{
+		for(int j = 0; j<n; j++)
+		{
+			
+			test1[i][j] = r1.nextInt(1,29);
+		}
+	}
+	cout << "p = [ ";
+	for(int i = 0; i<wlk; i++)
+	{
+		cout << "[ ";
+		for(int j = 0; j<n; j++)
+		{
+			cout << test1[i][j] << " ";
+
+		}
+		cout << "] ";
+	}
+	cout <<"]" << endl;
+
+	for(int i = 0; i<wlk; i++)
+	{
+		test2.push_back(quest[i]);
+	}
+	Johnson(test1, n);
+	Kryt(test1,n);
+	return 0;
+}
+
+
+
+
 
 int min_idx(vector<int*> N, int m)
 {
@@ -30,6 +95,27 @@ int min_idx(vector<int*> N, int m)
 	}
 	return idx;	
 }
+
+
+int min_idx(vector<Zadanie> N, int m)
+{
+	int idx = 0;
+	int buf = N[0].t[0];
+	for(int i=0; i<N.size();i++)
+	{
+		for(int j=0; j<m; j++)
+		{
+			if(N[i].t[j]<buf)
+			{
+				buf=N[i].t[j];
+				idx = i;
+			}
+		}
+	}
+	//cout << idx;
+	return idx;	
+}
+
 void Kryt(vector<int*> J, int m)
 {
 	int S[J.size()][m];
@@ -58,6 +144,9 @@ void Kryt(vector<int*> J, int m)
 	}
 	cout << endl << "C_max = " << C[J.size()-1][1] << endl;
 }
+
+
+
 void Johnson(vector<int*> J, int m)
 {
 	int Pi[J.size()];
@@ -70,7 +159,7 @@ void Johnson(vector<int*> J, int m)
 		int ii = min_idx(J,m);
 		if(J[ii][0] < J[ii][m-1])
 		{
-			
+
 			Pi[l] = ii+1;
 			tmp[l][0] = J[ii][0];
 			tmp[l][m-1] = J[ii][m-1];
@@ -102,43 +191,55 @@ void Johnson(vector<int*> J, int m)
 	}
 }
 
-int main()
+/*vector<Zadanie> Johnson2(vector<Zadanie> J, int m)
 {
-	long ziarno;
-	cout << "Podaj ziarno: ";
-	cin >> ziarno;
-	RandomNumberGenerator r1(ziarno);
-	int wlk;
-	cout << "Wprowadz wielkosc instancji: ";
-	cin >> wlk;
-	int n = 2; //dla dwóch maszyn
-	vector<int*> test1;
-	for(int i=0; i<wlk; i++)
+	vector<Zadanie> N = J;
+	vector<Zadanie> Wynik;
+	//vector<Zadanie> z1 = J;
+	int Pi[N.size()];
+	int l = 0;
+	int k = N.size()-1;
+	//int z = N.size();
+	int tmp[N.size()][m];
+	while(N.size()!=0)
 	{
-		int* kkk = new int [n];
-		test1.push_back(kkk);
-
-	}
-
-	for(int i = 0; i<wlk; i++)
-	{
-		for(int j = 0; j<n; j++)
+		int ii = min_idx(N,m);
+		if(N[ii].t[0] < N[ii].t[1])
 		{
-			test1[i][j] = r1.nextInt(1,29);
+			
+			Pi[l] = ii+1;
+			//tmp[l][0] = J[ii][0];
+			//tmp[l][m-1] = J[ii][m-1];
+			l++;	
 		}
-	}
-	cout << "p = [ ";
-	for(int i = 0; i<wlk; i++)
-	{
-		cout << "[ ";
-		for(int j = 0; j<n; j++)
+		else
 		{
-			cout << test1[i][j] << " ";
+			Pi[k] = ii+1;
+			//tmp[k][0] = J[ii][0];
+			//tmp[k][m-1] = J[ii][m-1];
+			k--;
 		}
-		cout << "] ";
+		Wynik.push_back(N[ii]);
+		N.erase(N.begin()+ii);
+		cout << N.size() << endl;
+		//J[ii][0] = 99;
+		//J[ii][m-1] = 99;
+		//z--;
 	}
-	cout <<"]" << endl;
-	Johnson(test1, n);
-	Kryt(test1,n);
-	return 0;
-}
+	cout << "Pi = [ ";
+	for(int s=0; s<Wynik.size(); s++)
+	{
+		cout << Pi[s] << " ";
+	}
+	cout << "]" << endl;
+	
+	for(int i = 0; i<J.size(); i++)
+	{
+		for(int j = 0; j<m; j++)
+		{
+			cout << Wynik[i].t[j] << " ";
+		}
+		cout << endl;
+	}
+	return Wynik;
+}*/
