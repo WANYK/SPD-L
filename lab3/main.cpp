@@ -64,7 +64,7 @@ int Kryt(vector<Zadanie> z1)
 		C[i] = S[i]+z1[i].p_j;
 		T[i] = max(C[i]-z1[i].d_j, 0);
 		F+=T[i]*z1[i].w_j;
-		cout << "S= " << S[i] << " C= " << C[i] << " T= " << T[i] << endl;
+		//cout << "S= " << S[i] << " C= " << C[i] << " T= " << T[i] << endl;
 	}
 
 	return F;
@@ -78,7 +78,7 @@ vector<Zadanie> Sort_it(vector<Zadanie> z1)
 	{
 		for(int j=0; j<wynik.size(); j++)
 		{
-			if(wynik[j].d_j > wynik[i].d_j)
+			if(wynik[j].d_j >= wynik[i].d_j)
 			{
 				swap(wynik[j], wynik[i]);
 			}
@@ -141,7 +141,7 @@ int main()
 
 	delete [] quest ;
 	Wyswietl(quest2);
-	Wyswietl(Sort_it(quest2));
+	//Wyswietl(Sort_it(quest2));
 	cout << "neutral WiTi sum = " << Kryt(quest2) << endl;
 	cout << "greedy WiTi sum = " << Kryt(Sort_it(quest2)) << endl;
 	return 0;
